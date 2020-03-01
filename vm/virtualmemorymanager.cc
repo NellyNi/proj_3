@@ -114,7 +114,7 @@ void VirtualMemoryManager::releasePages(AddrSpace* space)
  //     SwapSectorInfo * swapPageInfo = swapSpaceInfo + swapSpaceIndex;
 //      swapPageInfo->removePage(currPage);
       //swapPageInfo->pageTableEntry = NULL;
-        int* locationToClear = space->locationOnDisk[i];
+        int locationToClear = space->locationOnDisk[i];
         if (currPage->valid == TRUE)
         {
             //int currPID = currPage->space->getPCB()->getPID();
