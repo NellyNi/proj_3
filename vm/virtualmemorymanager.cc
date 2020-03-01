@@ -61,13 +61,37 @@ void VirtualMemoryManager::swapPageIn(int virtAddr)
         }
 
         FrameInfo * physPageInfo = physicalMemoryInfo + nextVictim;
+
+        while(physPageInfo->space!=NULL && getPageTableEntry(physPageInfo)->use==TRUE){
+                getPageTableEntry(physPageInfo)->use=FALSE;
+                nextVictim=nextVictim+1;
+                physPageInfo = physicalMemoryInfo + nextVictim;
+        }
         //We assume this page is not occupied by any process space
-        physPageInfo->space = currentThread->space;
-        physPageInfo->pageTableIndex = virtAddr / PageSize;
-        currPageEntry = getPageTableEntry(physPageInfo);
-        currPageEntry->physicalPage = memoryManager->getPage();
-        loadPageToCurrVictim(virtAddr);
-        nextVictim = nextVictim + 1;
+        if(physPageInfo->space==NULL){
+            physPageInfo=new FrameInfo();
+            physPageInfo->space = currentThread->space;
+            physPageInfo->pageTableIndex = virtAddr / PageSize;
+            currPageEntry = getPageTableEntry(physPageInfo);
+            currPageEntry->physicalPage = memoryManager->getPage();
+            loadPageToCurrVictim(virtAddr);
+        }else{
+            if (getPageTableEntry(physPageInfo)->dirty==TRUE){
+                TranslationEntry* page = getPageTableEntry(physPageInfo);
+                char* physMemLoc = machine->mainMemory + page->physicalPage * PageSize;
+                int swapSpaceLoc = page->locationOnDisk;
+                writeToSwap(physMemLoc, PageSize, swapSpaceLoc);
+                getPageTableEntry(physPageInfo)->dirty=FALSE;
+            }
+            physPageInfo->space = currentThread->space;
+            physPageInfo->pageTableIndex = virtAddr / PageSize;
+            currPageEntry = getPageTableEntry(physPageInfo);
+            currPageEntry->physicalPage = memoryManager->getPage();
+            loadPageToCurrVictim(virtAddr);
+            getPageTableEntry(physPageInfo)->valid=FALSE;
+            
+        }
+        nextVictim=nextVictim+1;
 }
 
 
