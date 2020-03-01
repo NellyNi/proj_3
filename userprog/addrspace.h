@@ -1,5 +1,5 @@
-// addrspace.h 
-//	Data structures to keep track of executing user programs 
+// addrspace.h
+//	Data structures to keep track of executing user programs
 //	(address spaces).
 //
 //	For now, we don't keep any information about address spaces.
@@ -7,7 +7,7 @@
 //	executing the user program (see thread.h).
 //
 // Copyright (c) 1992-1993 The Regents of the University of California.
-// All rights reserved.  See copyright.h for copyright notice and limitation 
+// All rights reserved.  See copyright.h for copyright notice and limitation
 // of liability and disclaimer of warranty provisions.
 
 #ifndef ADDRSPACE_H
@@ -36,16 +36,17 @@ class AddrSpace {
 
     void InitRegisters();		// Initialize user-level CPU registers,
     void SaveState();			// Save/restore address space-specific
-    void RestoreState();		// info on a context switch 
+    void RestoreState();		// info on a context switch
     PCB* getPCB();                      // returns the associated PCB
     bool isValid();                     // means we allocated addrspace success
     TranslationEntry* getPageTableEntry(int pageTableIndex);
     int getPageIndex(TranslationEntry* page);
     TranslationEntry *pageTable;	// Assume linear page table translation
 					// for now!
-
+    int* locationOnDisk;
+    
   private:
-    unsigned int numPages;		// Number of pages in the virtual 
+    unsigned int numPages;		// Number of pages in the virtual
 					// address space
     PCB* pcb;                           // associated PCB
 };
@@ -66,14 +67,14 @@ class AddrSpace {
 
     void InitRegisters();		// Initialize user-level CPU registers,
     void SaveState();			// Save/restore address space-specific
-    void RestoreState();		// info on a context switch 
+    void RestoreState();		// info on a context switch
     PCB* getPCB();                      // returns the associated PCB
     bool isValid();                     // means we allocated addrspace success
     TranslationEntry *pageTable;	// Assume linear page table translation
 					// for now!
 
   private:
-    unsigned int numPages;		// Number of pages in the virtual 
+    unsigned int numPages;		// Number of pages in the virtual
 					// address space
     PCB* pcb;                           // associated PCB
 };
