@@ -111,7 +111,8 @@ AddrSpace::AddrSpace(OpenFile *executable, PCB* newPCB)
         virtualMemoryManager->writeToSwap(placeHolder, PageSize,locationOnDisk[i]);
 
         // Debuggin output
-        int currVirtPage = pageTable[i].locationOnDisk / PageSize;
+        //int currVirtPage = pageTable[i].locationOnDisk / PageSize;
+				int currVirtPage = locationOnDisk[i] / PageSize;
         DEBUG('v',"Z %d: %d\n", pcb->getPID(), currVirtPage);
 
         // Maintain swap space page information
