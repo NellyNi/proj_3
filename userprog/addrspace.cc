@@ -171,7 +171,7 @@ AddrSpace::AddrSpace(const AddrSpace* other, PCB* newPCB)
         locationOnDisk[i] = virtualMemoryManager->allocSwapSector();
 				//modified 6
         virtualMemoryManager->copySwapSector(locationOnDisk[i],
-                                             (other->locationOnDisk[i]);
+                                             (other->locationOnDisk[i]));
 
         // Maintain swap space page information
         //SwapSectorInfo * swapInfo =
